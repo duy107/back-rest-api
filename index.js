@@ -6,6 +6,10 @@ const app = express();
 config();
 const port = process.env.PORT;
 
+
+//cors
+const cors = require("cors");
+app.use(cors());
 // body-parse
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());
