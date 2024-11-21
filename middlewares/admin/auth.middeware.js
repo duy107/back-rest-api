@@ -1,35 +1,35 @@
-const User = require("../../models/user.model");
+const Company = require("../../models/company.model");
 module.exports.auth = async (req, res, next) => {
     if (req.headers.authorization) {
         const token = req.headers.authorization.split(" ")[1];
-        const user = await User.findOne({
-            tokenUser: token,
-            deleted: false,
-            status: "active"
+        const company = await Company.findOne({
+            token: token,
+            deleted: false
         }).select("-password");
 
-        if (!user) {
+        if (!company) {
             res.json({
                 code: 400,
                 message: "Token không hợp lệ!"
             })
             return;
         }
-        res.locals.user = user;
+        res.cookie("token", token);
+        res.locals.company = company;
     } else {
-        const token = req.cookies.tokenUser;
-        const user = await User.findOne({
-            tokenUser: token,
+        const token = req.cookies.token;
+        const company = await Company.findOne({
+            token: token,
             deleted: false
         }).select("-password");
-        if (!user) {
+        if (!company) {
             res.json({
                 code: 400,
                 message: "Sai token!"
             })
             return;
         }
-        res.locals.user = user;
+        res.locals.company = company;
     }
     next();
 }

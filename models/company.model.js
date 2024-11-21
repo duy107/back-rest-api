@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 const generate = require("../helpers/generate");
-const userSchema = new mongoose.Schema({
-    fullName: String,
+const companySchema = new mongoose.Schema({
+    name: String,
     email: String,
     password: String,
     phone: String,
-    avatar: String,
+    logo: String,
     address: String,
-    tokenUser: {
+    description: String,
+    workingTime: String,
+    website: String,
+    quantityPeople: Number,
+    token: {
         type: String,
         default: () => generate.generateToken(20)
     },
@@ -15,14 +19,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    deletedAt: String,
-    status: {
-        type: String,
-        default: "active"
-    }
+    deletedAt: String
 }, {
     timestamps: true
 });
-const User = mongoose.model('User', userSchema, "users");
+const Company = mongoose.model('Company', companySchema, "companies");
 
-module.exports = User;
+module.exports = Company;
