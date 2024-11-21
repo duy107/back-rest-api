@@ -2,7 +2,11 @@ const Company = require("../../models/company.model");
 module.exports.login = async (req, res) => {
     const {email} = req.body;
     const company = await Company.findOne({email: email}).select("token");
-    res.cookie("token", company.token);
+    res.cookie("token", company.token , {
+        httpOnly: true,
+        secure: true, // Chỉ gửi cookie qua HTTPS
+        sameSite: "none", // Hỗ trợ cross-origin
+    });
     res.json({
         code: 200,
         message: "Login success",

@@ -14,7 +14,11 @@ module.exports.auth = async (req, res, next) => {
             })
             return;
         }
-        res.cookie("token", token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true, // Chỉ gửi cookie qua HTTPS
+            sameSite: "none", // Hỗ trợ cross-origin
+        });
         res.locals.company = company;
     } else {
         const token = req.cookies.token;
