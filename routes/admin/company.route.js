@@ -3,7 +3,7 @@ const controller = require("../../controllers/admin/company.controller");
 const middleware = require("../../middlewares/admin/auth.middeware");
 const express = require("express");
 const route = express.Router();
-route.get("/login", controller.loginGet);
+// route.get("/login", controller.loginGet);
 route.post("/login",
             validate.login,
             controller.login);
