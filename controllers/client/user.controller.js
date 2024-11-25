@@ -10,7 +10,7 @@ module.exports.login = async (req, res) => {
     res.cookie("tokenUser", inforUser.tokenUser, {
         httpOnly: true,
         secure: true, // Chỉ gửi cookie qua HTTPS
-        sameSite: "none", // Hỗ trợ cross-origin
+        sameSite: "None", // Hỗ trợ cross-origin
     });
     delete inforUser.tokenUser;
     res.json({
