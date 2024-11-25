@@ -14,7 +14,7 @@ const port = process.env.PORT;
 const cors = require("cors");
 app.use(cors(
     {
-        origin: "https://localhost:3000", 
+        origin: "https://font-rest-api.vercel.app", 
         credentials: true,
     }
 ));
