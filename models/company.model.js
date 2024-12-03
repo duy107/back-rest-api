@@ -11,6 +11,7 @@ const companySchema = new mongoose.Schema({
     workingTime: String,
     website: String,
     quantityPeople: Number,
+    role_id: String,
     token: {
         type: String,
         default: () => generate.generateToken(20)

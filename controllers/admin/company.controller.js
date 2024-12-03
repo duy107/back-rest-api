@@ -1,27 +1,16 @@
+const md5 = require("md5");
 const Company = require("../../models/company.model");
+const Role = require("../../models/role.model");
 module.exports.login = async (req, res) => {
     const {email} = req.body;
-    const company = await Company.findOne({email: email}).select("token");
-    res.cookie("token", company.token , {
-        httpOnly: true,
-        secure: true, // Chỉ gửi cookie qua HTTPS
-        sameSite: "none", // Hỗ trợ cross-origin
-    });
+    const company = await Company.findOne({email: email}).select("token role_id");
+    const role = await Role.findOne({_id: company.role_id}).select("permissions");
+    res.cookie("token", company.token);
     res.json({
         code: 200,
         message: "Login success",
-        token: company.token
+        permissions: role.permissions
     })
-}
-module.exports.loginGet = async (req, res) => {
-    const token = req.cookies.token;
-    const company = await Company.findOne({token: token}).select("token");
-    if(company){
-        res.json({
-            code: 400,
-            message: "Đã đăng nhập!"
-        })
-    }
 }
 module.exports.infor = (req, res) => {
     res.json(res.locals.company);
@@ -41,4 +30,40 @@ module.exports.update = async (req, res) => {
             message: "Cập nhật thất bại!"
         })
     }
+}
+
+module.exports.account = async (req, res) => {
+    try {
+        const account = await Company.find({deleted: false}).select("role_id name email").lean();
+        for(const acc of account){
+            const role = await Role.findOne({_id: acc.role_id}).select("title");
+            acc.role = role
+        }
+        res.json({
+            code: 200,
+            data: account
+        })
+    } catch (error) {
+        res.json({
+            code: 400
+        })
+    }
+}
+
+module.exports.accountCreate = async (req, res) => {
+    try {
+        req.body.password = md5(req.body.password);
+        const account = new Company(req.body);
+        await account.save();
+        res.json({
+            code: 200,
+            message: "Tạo thành công!"
+        })
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error"
+        })
+    }
+    
 }

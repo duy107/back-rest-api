@@ -14,18 +14,10 @@ const port = process.env.PORT;
 const cors = require("cors");
 app.use(cors(
     {
-        origin: 'https://font-rest-api.vercel.app', // Chỉ định domain của frontend
-        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Các phương thức cho phép
-        allowedHeaders: ['Content-Type', 'Authorization'], // Các header cho phép
-        credentials: true, // Cho phép cookies (nếu cần)
+        origin: "http://localhost:3000", 
+        credentials: true,
     }
 ));
-app.options('*', cors( {
-    origin: 'https://font-rest-api.vercel.app', // Chỉ định domain của frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Các phương thức cho phép
-    allowedHeaders: ['Content-Type', 'Authorization'], // Các header cho phép
-    credentials: true, // Cho phép cookies (nếu cần)
-}))
 // body-parse
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());

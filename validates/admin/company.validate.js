@@ -29,3 +29,26 @@ module.exports.login = async (req, res, next) => {
     }
     next();
 }
+
+module.exports.createAccout = async (req, res, next) => {
+    try {
+        const {email} = req.body;
+        const account = await Company.findOne({
+            email: email,
+            deleted: false
+        })
+        if(account){
+            res.json({
+                code: 400,
+                message: "Email đã tồn tại!"
+            })
+            return;
+        }
+        next();
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error!"
+        })
+    }
+}

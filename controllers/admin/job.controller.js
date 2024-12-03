@@ -7,7 +7,6 @@ const { fullInfor } = require("../../helpers/inforJob");
 module.exports.listJob = async (req, res) => {
     const id = res.locals.company.id;
     const listJob = await Job.find({
-        company_id: id,
         deleted: false
     }).lean();
     const jobs = await fullInfor(listJob);

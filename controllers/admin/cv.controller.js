@@ -4,7 +4,6 @@ const User = require("../../models/user.model");
 module.exports.listCv = async (req, res) => {
     const id = res.locals.company.id;
     const listCv = await CV.find({
-        company_id: id,
         deleted: false
     }).lean();
     if (listCv.length > 0) {

@@ -7,11 +7,12 @@ module.exports.login = async (req, res) => {
     const inforUser = await User.findOne({
         email: req.body.email
     }).select("fullName email phone address avatar tokenUser").lean();
-    res.cookie("tokenUser", inforUser.tokenUser, {
-        httpOnly: true,
-        secure: true, // Chỉ gửi cookie qua HTTPS
-        sameSite: "None", // Hỗ trợ cross-origin
-    });
+    res.cookie("tokenUser", inforUser.tokenUser);
+    // res.cookie("tokenUser", inforUser.tokenUser, {
+    //     httpOnly: true,
+    //     secure: true, // Chỉ gửi cookie qua HTTPS
+    //     sameSite: "None", // Hỗ trợ cross-origin
+    // });
     delete inforUser.tokenUser;
     res.json({
         code: 200,
