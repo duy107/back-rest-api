@@ -67,3 +67,25 @@ module.exports.accountCreate = async (req, res) => {
     }
     
 }
+
+module.exports.accountDelete = async (req, res) => {
+   try {
+        const account_id = req.body.id;
+        await Company.updateOne({_id: account_id}, {deleted: true});
+        res.status(200).json({
+            message:  "Success"
+        })
+   } catch (error) {
+        res.status(404).json({});
+   }
+}
+
+module.exports.accountUpdate = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(404).json({
+            message: "failed"
+        })
+    }
+}

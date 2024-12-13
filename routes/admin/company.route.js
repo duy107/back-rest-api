@@ -13,4 +13,6 @@ route.post("/account-management/create",
     middleware.auth,
     validate.createAccout,
     controller.accountCreate);
+route.delete("/account-management/delete", middleware.auth, controller.accountDelete);
+route.patch("/account-management/update", middleware.auth, controller.accountUpdate);
 module.exports = route;

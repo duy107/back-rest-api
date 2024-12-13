@@ -3,7 +3,7 @@ const Tag = require("../../models/tag.model");
 const City = require("../../models/city.model");
 const TagJob = require("../../models/tag-job.model");
 const CityJob = require("../../models/city-job.model");
-const { fullInfor } = require("../../helpers/inforJob");
+const { fullInfor } = require("../../helpers/inforJob");    
 module.exports.listJob = async (req, res) => {
     const id = res.locals.company.id;
     const listJob = await Job.find({
@@ -12,7 +12,6 @@ module.exports.listJob = async (req, res) => {
     const jobs = await fullInfor(listJob);
     res.json(jobs);
 }
-
 module.exports.update = async (req, res) => {
     try {
         const { id, tags, cities } = req.body;

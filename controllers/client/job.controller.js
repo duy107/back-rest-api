@@ -45,3 +45,13 @@ module.exports.detail = async (req, res) => {
         data: job
     })
 }
+module.exports.list = async (req, res) => {
+    const listJob = await Job.find({
+        deleted: false
+    }).limit(4).lean();
+    const jobs = await fullInfor(listJob);
+    res.json({
+        message: "success",
+        data: jobs
+    });
+}
