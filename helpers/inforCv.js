@@ -1,9 +1,4 @@
-const Cv = require("../models/cv.model");
 const Job = require("../models/job.model");
-const TagJob = require("../models/tag-job.model");
-const CityJob = require("../models/city-job.model");
-const Tag = require("../models/tag.model");
-const City = require("../models/city.model");
 const Company = require("../models/company.model");
 
 module.exports.inforCompany = async (item) => {
@@ -16,8 +11,7 @@ module.exports.inforCompany = async (item) => {
 module.exports.inforJob = async (item) => {
     const job = await Job.findOne({
         _id: item.job_id,
-        deleted: false,
-        status: true
+        deleted: false
     }).select("name");
     return job;
 }

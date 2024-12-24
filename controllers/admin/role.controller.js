@@ -64,7 +64,14 @@ module.exports.changePermission = async (req, res) => {
             const id = item.role_id;
             await Role.updateOne({_id: id}, {permissions: item.permissions});
         }
+        res.json({
+            code: 200,
+            message: "Cập nhật thành công!"
+        })
     } catch (error) {
-        
+        res.json({
+            code: 400,
+            message: "Cập nhật thất bại!"
+        })
     }
 }

@@ -1,11 +1,15 @@
 const md5 = require("md5");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const Company = require("../../models/company.model");
 const Role = require("../../models/role.model");
 module.exports.login = async (req, res) => {
-    const {email} = req.body;
-    const company = await Company.findOne({email: email}).select("token role_id");
-    const role = await Role.findOne({_id: company.role_id}).select("permissions");
+    const { email } = req.body;
+    const company = await Company.findOne({ email: email }).select("token role_id");
+    const role = await Role.findOne({ _id: company.role_id }).select("permissions").lean();
     res.cookie("token", company.token);
+    const jwt_token  = jwt.sign(role, process.env.JWT_KEY, {expiresIn: "1d"});
+    res.cookie("permission", jwt.sign(role, process.env.JWT_KEY, {expiresIn: "1d"}));
     res.json({
         code: 200,
         message: "Login success",
@@ -17,9 +21,17 @@ module.exports.infor = (req, res) => {
 }
 
 module.exports.update = async (req, res) => {
-    const id = res.locals.company.id;
-    try {   
-        await Company.updateOne({_id: id}, req.body);
+    try {
+        if (req.body.id) {
+            await Company.updateOne({
+                _id: req.body.id
+            }, {
+                role_id: req.body.role_id
+            })
+        } else {
+            const id = res.locals.company.id;
+            await Company.updateOne({_id: id}, req.body);
+        }
         res.json({
             code: 200,
             message: "Cập nhật thành công!"
@@ -34,9 +46,13 @@ module.exports.update = async (req, res) => {
 
 module.exports.account = async (req, res) => {
     try {
-        const account = await Company.find({deleted: false}).select("role_id name email").lean();
-        for(const acc of account){
-            const role = await Role.findOne({_id: acc.role_id}).select("title");
+        const token = req. res.locals.company.token;
+        const account = await Company.find({
+            deleted: false,
+            token: {$ne: token}
+        }).select("role_id name email").lean();
+        for (const acc of account) {
+            const role = await Role.findOne({ _id: acc.role_id }).select("title");
             acc.role = role
         }
         res.json({
@@ -65,24 +81,24 @@ module.exports.accountCreate = async (req, res) => {
             message: "Error"
         })
     }
-    
+
 }
 
 module.exports.accountDelete = async (req, res) => {
-   try {
+    try {
         const account_id = req.body.id;
-        await Company.updateOne({_id: account_id}, {deleted: true});
+        await Company.updateOne({ _id: account_id }, { deleted: true });
         res.status(200).json({
-            message:  "Success"
+            message: "Success"
         })
-   } catch (error) {
+    } catch (error) {
         res.status(404).json({});
-   }
+    }
 }
 
 module.exports.accountUpdate = async (req, res) => {
     try {
-        
+
     } catch (error) {
         res.status(404).json({
             message: "failed"

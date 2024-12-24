@@ -71,7 +71,7 @@ module.exports.reset = (req, res, next) => {
 }
 
 module.exports.register = async (req, res, next) => {
-    const { email } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({
         email: email,
         deleted: false
@@ -83,22 +83,40 @@ module.exports.register = async (req, res, next) => {
         })
         return;
     }
+    const pattern = /(?=.*\d)(?=.*\W)(?=.*[A-Z]).{8,}/;
+    if (!pattern.test(password)) {
+        res.json({
+            code: 400,
+            message: "Mật khẩu tối thiểu 8 ký tự (ít nhất 1 số, 1 ký tự đặc biệt, 1 chữ hoa)!"
+        })
+        return;
+    }
     next();
 }
 
 module.exports.edit = async (req, res, next) => {
     const token = req.cookies.tokenUser;
     const user = await User.findOne({
-        tokenUser: {$ne: token},
+        tokenUser: { $ne: token },
         email: req.body.email,
         deleted: false
     });
-    if(user){
+    if (user) {
         res.json({
             code: 400,
             message: "Email đã tồn tại!"
         })
         return;
+    }
+    if (req.body.password) {
+        const pattern = /(?=.*\d)(?=.*\W)(?=.*[A-Z]).{8,}/;
+        if (!pattern.test(req.body.password)) {
+            res.json({
+                code: 400,
+                message: "Mật khẩu tối thiểu 8 ký tự (ít nhất 1 số, 1 ký tự đặc biệt, 1 chữ hoa)!"
+            })
+            return;
+        }
     }
     next();
 }

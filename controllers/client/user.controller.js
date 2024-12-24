@@ -1,4 +1,6 @@
 const md5 = require("md5");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const User = require("../../models/user.model");
 const Forgot = require("../../models/forgot-password.model");
 const helperGenerate = require("../../helpers/generate");
@@ -8,11 +10,8 @@ module.exports.login = async (req, res) => {
         email: req.body.email
     }).select("fullName email phone address avatar tokenUser").lean();
     res.cookie("tokenUser", inforUser.tokenUser);
-    // res.cookie("tokenUser", inforUser.tokenUser, {
-    //     httpOnly: true,
-    //     secure: true, // Chỉ gửi cookie qua HTTPS
-    //     sameSite: "None", // Hỗ trợ cross-origin
-    // });
+    const token = jwt.sign(inforUser, process.env.JWT_KEY, { expiresIn: "1d" });
+    res.cookie("jwt_token", token);
     delete inforUser.tokenUser;
     res.json({
         code: 200,
@@ -124,4 +123,8 @@ module.exports.changeInfor = async (req, res) => {
             message: "Update failed!"
         })
     }
+}
+
+module.exports.infor = (req, res) => {
+    res.json("OK");
 }

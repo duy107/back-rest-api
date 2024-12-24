@@ -20,10 +20,10 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.getByIdUser = async (req, res) => {
-    const used_id = req.params.id; 
+    const user_id = req.params.id
     try {
         const listCv = await Cv.find({
-            user_id: used_id,
+            user_id: user_id,
             deleted: false,
             accepted: true
         }).lean();;

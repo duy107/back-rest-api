@@ -3,7 +3,9 @@ const controller = require("../../controllers/client/user.controller");
 const validate = require("../../validates/client/user.validate");
 const route = express.Router();
 const uploadFile = require("../../middlewares/client/uploadCloudinary.middleware");
-const multer = require('multer')
+const multer = require('multer');
+const { demo } = require("../../middlewares/client/jwt.middleware");
+const { auth } = require("../../middlewares/client/auth.middeware");
 const upload = multer()
 route.post("/login",
     validate.login,
@@ -25,5 +27,6 @@ route.patch("/infor/change",
     validate.edit,
     uploadFile.upload,
     controller.changeInfor
-)   
+)
+route.get("/infor", demo, controller.infor);   
 module.exports = route; 

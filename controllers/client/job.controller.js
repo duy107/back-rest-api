@@ -2,14 +2,20 @@ const Job = require("../../models/job.model");
 const CityJob = require("../../models/city-job.model");
 const TagJob = require("../../models/tag-job.model");
 const { fullInfor, inforCity, inforTag, inforCompany } = require("../../helpers/inforJob");
+const { convertToSlug } = require("../../helpers/convertToSlug");
 module.exports.search = async (req, res) => {
     try {
         const {cities, tags, keyword} = req.query;
         const tagsSearch = JSON.parse(tags);
         const citySearch = JSON.parse(cities);
+        const convertSlug = convertToSlug(keyword);
         const reg = new RegExp(keyword, "i");
+        const slug = new RegExp(convertSlug, "i");
         const jobKeyword = await Job.find({
-            name: reg,
+            $or: [
+                { title: reg },
+                { slug: slug }
+            ],
             deleted: false,
             status: true
         });
@@ -47,7 +53,8 @@ module.exports.detail = async (req, res) => {
 }
 module.exports.list = async (req, res) => {
     const listJob = await Job.find({
-        deleted: false
+        deleted: false,
+        status: true
     }).limit(4).lean();
     const jobs = await fullInfor(listJob);
     res.json({
