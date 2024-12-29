@@ -1,15 +1,10 @@
 const mongoose = require("mongoose");
 const cvSchema = new mongoose.Schema({
-    statusRead: {
-        type: Boolean, 
-        default: false
-    },
-    accepted: {
-        type: Boolean,
-        default: false
-    },
     description: String,
-    project: String,
+    status: {
+        type: String,
+        default: "initial"
+    },
     job_id: String,
     user_id: String,
     company_id: String,

@@ -27,7 +27,7 @@ module.exports.forgot = async (req, res) => {
         const objectForgot = {
             email: email,
             otp: otp,
-            expireAt: Date.now() + 10000
+            expireAt: Date.now() + 900000
         }
         const forgot = new Forgot(objectForgot);
         await forgot.save();
@@ -90,12 +90,12 @@ module.exports.register = async (req, res) => {
         await user.save();
         res.json({
             code: 200,
-            message: "Register success!"
+            message: "Đăng ký thành công!"
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Register failed!"
+            message: "Đăng ký thất bại!"
         })
     }
 }
@@ -114,13 +114,13 @@ module.exports.changeInfor = async (req, res) => {
         delete req.body.password
         res.json({
             code: 200,
-            message: "Update success!",
+            message: "Cập nhật thành công!",
             infor: req.body
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Update failed!"
+            message: "Cập nhật thất bại!"
         })
     }
 }

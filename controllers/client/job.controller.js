@@ -41,7 +41,7 @@ module.exports.detail = async (req, res) => {
     const slug = req.params.slug;
     const job = await Job.findOne({
         slug: slug,
-        deleted: false
+        // deleted: false
     }).lean();
     job.companyInfor = await inforCompany(job);
     job.tagInfor = await inforTag(job);
@@ -58,7 +58,7 @@ module.exports.list = async (req, res) => {
     }).limit(4).lean();
     const jobs = await fullInfor(listJob);
     res.json({
-        message: "success",
+        message: "Thành công",
         data: jobs
     });
 }

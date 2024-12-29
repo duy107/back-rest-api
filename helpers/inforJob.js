@@ -19,6 +19,7 @@ module.exports.inforTag = async (item) => {
     }
 }
 module.exports.inforCompany = async (item) => {
+    // console.log(item);
     const company = await Company.findOne({
         _id: item.company_id,
         deleted: false
@@ -37,6 +38,7 @@ module.exports.inforCity = async (item) => {
         }).select("name");
         return inforCity;
     }
+    return []
 }
 
 module.exports.fullInfor = async (data) => {

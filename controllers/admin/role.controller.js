@@ -37,9 +37,9 @@ module.exports.delete = async (req, res) => {
     try {
         const id = req.body._id;
         await Role.updateOne({_id: id}, {deleted: true});
-        res.status(200).json({message: "success"});
+        res.status(200).json({message: "Xóa thành công!"});
     } catch (error) {
-        res.status(400).json({message: "failed"});
+        res.status(400).json({message: "Xóa thất bại!"});
     }
 }
 module.exports.update = async (req, res) => {

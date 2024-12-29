@@ -11,8 +11,7 @@ module.exports.inforCompany = async (item) => {
 module.exports.inforJob = async (item) => {
     const job = await Job.findOne({
         _id: item.job_id,
-        deleted: false
-    }).select("name");
+    }).select("name slug salary");
     return job;
 }
 

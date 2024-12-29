@@ -4,29 +4,31 @@ module.exports.create = async (req, res) => {
     try {
         const data = req.body;
         data.description?.trim() === "" && delete data.description;
-        data.project?.trim() === "" && delete data.project;
         const cv = new Cv(data);
         await cv.save();
         res.json({
             code: 200,
-            message: "Create success!"
+            message: "Tạo thành công!"
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Create falied!"
+            message: "Tạo thất bại!"
         })
     }
 }
 
 module.exports.getByIdUser = async (req, res) => {
-    const user_id = req.params.id
+    const {id, status} = req.params;
     try {
-        const listCv = await Cv.find({
-            user_id: user_id,
-            deleted: false,
-            accepted: true
-        }).lean();;
+        const option = {
+            user_id: id,
+            // deleted: false 
+        }
+        if(status != "all"){
+            option.status = status;
+        }
+        const listCv = await Cv.find(option).lean();
         const data = await fullInfor(listCv);
         res.json({
             code: 200,

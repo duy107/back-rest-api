@@ -12,7 +12,7 @@ module.exports.login = async (req, res) => {
     res.cookie("permission", jwt.sign(role, process.env.JWT_KEY, {expiresIn: "1d"}));
     res.json({
         code: 200,
-        message: "Login success",
+        message: "Đăng nhập thành công",
         permissions: role.permissions
     })
 }
@@ -89,7 +89,7 @@ module.exports.accountDelete = async (req, res) => {
         const account_id = req.body.id;
         await Company.updateOne({ _id: account_id }, { deleted: true });
         res.status(200).json({
-            message: "Success"
+            message: "Thành công"
         })
     } catch (error) {
         res.status(404).json({});

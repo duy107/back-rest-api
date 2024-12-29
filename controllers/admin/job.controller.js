@@ -3,7 +3,7 @@ const Tag = require("../../models/tag.model");
 const City = require("../../models/city.model");
 const TagJob = require("../../models/tag-job.model");
 const CityJob = require("../../models/city-job.model");
-const { fullInfor } = require("../../helpers/inforJob");    
+const { fullInfor, inforTag, inforCity } = require("../../helpers/inforJob");    
 module.exports.listJob = async (req, res) => {
     const id = res.locals.company.id;
     const listJob = await Job.find({
@@ -39,12 +39,12 @@ module.exports.update = async (req, res) => {
         await CityJob.insertMany(cityJobs);
         res.json({
             code: 200,
-            message: "Update success!"
+            message: "Cập nhật thành công!"
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Update failed!"
+            message: "Cập nhật thất bại!"
         })
     }
 }
@@ -54,12 +54,12 @@ module.exports.delete = async (req, res) => {
         await Job.updateOne({ _id: id }, { deleted: true });
         res.json({
             code: 200,
-            message: "Delete success!"
+            message: "Xóa thành công!"
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Delete failed!"
+            message: "Xóa thất bại!"
         })
     }
 }
@@ -89,13 +89,34 @@ module.exports.create = async (req, res) => {
 
         res.json({
             code: 200,
-            message: "Create success!"
+            message: "Tạo mới thành công!"
         })
     } catch (error) {
         res.json({
             code: 400,
-            message: "Create failed!"
+            message: "Tạo mới thất bại!"
         })
 
+    }
+}
+
+module.exports.detail = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const infor = await Job.findOne({
+            _id: id,
+            deleted: false
+        }).lean();
+        infor.cities = await inforCity(infor);
+        infor.tags = await inforTag(infor);
+        res.json({
+            code: 200,
+            infor
+        })
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error"
+        })
     }
 }

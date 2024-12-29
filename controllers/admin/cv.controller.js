@@ -10,7 +10,7 @@ module.exports.listCv = async (req, res) => {
         for (const item of listCv) {
             const job = await Job.findOne({
                 _id: item.job_id
-            }).select("name");
+            }).select("name status deleted");
             item.jobInfor = job;
             const user = await User.findOne(
                 {
@@ -25,11 +25,13 @@ module.exports.listCv = async (req, res) => {
 
 module.exports.changeStatus = async (req, res) => {
     try {
-        const {type, id} = req.body;
+        const {type, id} = req.body; 
         await CV.updateOne({
             _id: id
-        }, {[type]: true});
-        res.status(200).json("success");
+        }, {status: type});
+        res.json({
+            code: 200
+        })
     } catch (error) {
         res.json({code: 400});
     }
@@ -42,11 +44,11 @@ module.exports.delete = async (req, res) => {
             _id: cv_id
         }, {deleted: true});
         res.status(200).json({
-            message: "Delete success!"
+            message: "Xóa thành công!"
         })
     } catch (error) {
         res.status(400).json({
-            message: "Delete failed!"
+            message: "Xóa thất bại!"
         })
     }
 }

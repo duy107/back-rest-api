@@ -20,6 +20,9 @@ const jobSchema = new mongoose.Schema({
         slug: "name",
         unique: true
     },
+    experience: String,
+    level: String,
+    benefit: String
 }, {
     timestamps: true
 });
